@@ -77,30 +77,37 @@ var BuildingBlocks = (function() {
 	    }
 
 	    function lower_col(col) {
-		var dictRow = {};
 		var rgBlocks = rgRgBlocks[col];
+
+		var dictRow = {};
 		$.each(rgBlocks, function(i,block) {
 			dictRow[block.row] = block;
 		    });
-		var bottom = null;
+
+		rgBlocks.sort(function(a,b) {return a.row-b.row;});
+		var toDrop = {};
 		$.each(rgBlocks, function(i,block) {
-			if (block.row > 0
-			    && dictRow[block.row-1] === undefined) {
-			    bottom = block.row;
+			var cMissing = block.row - i;
+			if (cMissing > 0) {
+			    if (!toDrop[cMissing]) {
+				toDrop[cMissing] = [];
+			    }
+			    toDrop[cMissing].push(block);
 			}
+			block.row -= cMissing;
 		    });
-		if (bottom === null) {
-		    return;
-		}
-		var toDrop = [];
-		$.each(rgBlocks, function(i,block) {
-			if (block.row >= bottom) {
-			    block.row--;
-			    toDrop.push(block);
+
+
+		$.each(toDrop, function(n,toDropN) {
+			if (n > 0) {
+			    $.each(toDropN, function(i,block) {
+				    var options = {
+					bottom: "-=" + (n*BLOCK_WIDTH),
+					duration: 200
+				    };
+				    block.animate(options);
+				});
 			}
-		    });
-		$.each(toDrop, function(i,block) {
-			block.animate({bottom:"-=" + BLOCK_WIDTH}, 200);
 		    });
 		return toDrop.length;
 	    }
@@ -132,6 +139,21 @@ var BuildingBlocks = (function() {
 		reset_blocks();
 	    }
 
+	    function remove_color(sColor) {
+		var toLower = {};
+		var toRemove = [];
+		$.each(rgRgBlocks, function(i) {
+			$.each(rgRgBlocks[i], function(j,block) {
+				if (block.hasClass(sColor)) {
+				    toLower[i] = true;
+				    toRemove.push(block);
+				}
+			    });
+		    });
+		$.map(toRemove, remove_block);
+		$.each(toLower, lower_col);
+	    }
+
 	    var cWidth = jDest.width();
 	    var cHeight = jDest.height();
 	    var cColumns = cWidth / BLOCK_WIDTH;
@@ -153,7 +175,8 @@ var BuildingBlocks = (function() {
 	    var obj = {
 		blocks: rgRgBlocks,
 		widget: jDest,
-		clear: clear
+		clear: clear,
+		remove_color: remove_color
 	    };
 	    return obj;
 	}
@@ -175,7 +198,15 @@ $(function() {
 	    });
 	var dest = BuildingBlocks.build_block_dest($("div#construction_zone"));
 	$("a#clear_button").click(function(event) {
-		dest.clear();
 		event.preventDefault();
+		dest.clear();
+	    });
+	$("a#remove_blue").click(function(event) {
+		event.preventDefault();
+		dest.remove_color("blue");
+	    });
+	$("a#remove_red").click(function(event) {
+		event.preventDefault();
+		dest.remove_color("red");
 	    });
     });
