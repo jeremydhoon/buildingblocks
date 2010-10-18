@@ -5,6 +5,13 @@
 var BuildingBlocks = (function() {
 	var DRAGGABLE_SCOPE = "blocks";
 	var BLOCK_WIDTH = 100;
+
+	function disable_select(j) {
+	    j.bind("selectstart", function(event) {
+		    event.preventDefault();
+		});
+	}
+
 	function build_block_source(jSrc) {
 	    var options = {
 		cursor: "move",
@@ -22,6 +29,13 @@ var BuildingBlocks = (function() {
 	}
 	
 	function build_block_dest(jDest) {
+	    var cWidth = jDest.width();
+	    var cHeight = jDest.height();
+	    var cColumns = Math.floor(cWidth / BLOCK_WIDTH);
+	    var cMaxHeight = Math.floor(cHeight / BLOCK_WIDTH);
+	    
+	    var rgRgBlocks = [];
+
 	    function col_from_event(event) {
 		var offset = jDest.offset();
 		var dx = event.pageX - offset.left;
@@ -30,8 +44,8 @@ var BuildingBlocks = (function() {
 
 	    function drop_handler(event, ui) {
 		var cCol = col_from_event(event);
-		if (cCol >= cColumns || cCol < 0
-		    || rgRgBlocks[cCol].length >= cMaxHeight) {
+		if (cCol >= cColumns || cCol < 0 ||
+		    rgRgBlocks[cCol].length >= cMaxHeight) {
 		    return;
 		}
 		
@@ -52,8 +66,8 @@ var BuildingBlocks = (function() {
 	    function click_to_rc(event) {
 		var offset = jDest.offset();
 		var cCol = col_from_event(event);
-		var cRow = Math.floor(((offset.top + cHeight) - event.pageY)
-				      / BLOCK_WIDTH);
+		var cRow = Math.floor(((offset.top + cHeight) - event.pageY) /
+				      BLOCK_WIDTH);
 		return {row:cRow, col: cCol};
 	    }
 
@@ -65,11 +79,6 @@ var BuildingBlocks = (function() {
 			}
 		    });
 		return ix;
-	    }
-
-	    function get_block(row, col) {
-		var ix = get_block_index(row,col);
-		return rgRgBlocks[col][ix];
 	    }
 
 	    function remove_block(rc) {
@@ -161,12 +170,6 @@ var BuildingBlocks = (function() {
 		alert("Implement me!");
 	    }
 
-	    var cWidth = jDest.width();
-	    var cHeight = jDest.height();
-	    var cColumns = Math.floor(cWidth / BLOCK_WIDTH);
-	    var cMaxHeight = Math.floor(cHeight / BLOCK_WIDTH);
-	    
-	    var rgRgBlocks = [];
 	    reset_blocks();
 
 	    var options = {
@@ -188,14 +191,8 @@ var BuildingBlocks = (function() {
 	    return obj;
 	}
 
-	function disable_select(j) {
-	    j.bind("selectstart", function(event) {
-		    event.preventDefault();
-		});
-	}
-
 	return {build_block_source: build_block_source,
-		build_block_dest: build_block_dest,
+		build_block_dest: build_block_dest
 	};
     })();
 
@@ -211,6 +208,10 @@ $(window).load(function() {
 	$("a#remove_blue").click(function(event) {
 		event.preventDefault();
 		dest.remove_color("blue");
+	    });
+	$("a#remove_red").click(function(event) {
+		event.preventDefault();
+		dest.remove_color("red");
 	    });
 	$("a#remove_bottom").click(function(event) {
 		event.preventDefault();
