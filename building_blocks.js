@@ -164,18 +164,8 @@ var BuildingBlocks = (function() {
 		});
 	}
 
-	function clear_dest(dest) {
-	    dest.widget.children().fadeOut(200, function() {
-		    dest.widget.empty();
-		});
-	    dest.blocks = $.each(dest.blocks, function(i,rg) {
-		    rg.splice(0,rg.length);
-		});
-	}
-
 	return {build_block_source: build_block_source,
 		build_block_dest: build_block_dest,
-		clear_dest: clear_dest
 	};
     })();
 
