@@ -193,7 +193,7 @@ var BuildingBlocks = (function() {
 	};
     })();
 
-$(function() {
+$(document).ready(function() {
 	$.each(["left_block", "right_block"], function(i,s) {
 		BuildingBlocks.build_block_source($("div#" + s));
 	    });
