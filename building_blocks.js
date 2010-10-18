@@ -157,6 +157,10 @@ var BuildingBlocks = (function() {
 		$.each(toLower, lower_col);
 	    }
 
+	    function remove_bottom() {
+		alert("Implement me!");
+	    }
+
 	    var cWidth = jDest.width();
 	    var cHeight = jDest.height();
 	    var cColumns = Math.floor(cWidth / BLOCK_WIDTH);
@@ -178,7 +182,8 @@ var BuildingBlocks = (function() {
 		blocks: rgRgBlocks,
 		widget: jDest,
 		clear: clear,
-		remove_color: remove_color
+		remove_color: remove_color,
+		remove_bottom: remove_bottom
 	    };
 	    return obj;
 	}
@@ -207,8 +212,8 @@ $(window).load(function() {
 		event.preventDefault();
 		dest.remove_color("blue");
 	    });
-	$("a#remove_red").click(function(event) {
+	$("a#remove_bottom").click(function(event) {
 		event.preventDefault();
-		dest.remove_color("red");
+		dest.remove_bottom();
 	    });
     });
