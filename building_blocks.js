@@ -7,6 +7,7 @@ var BuildingBlocks = (function() {
 	var BLOCK_WIDTH = 100;
 	function build_block_source(jSrc) {
 	    var options = {
+		cursor: "move",
 		distance: 2,
 		helper: "clone",
 		opacity: 1,
@@ -193,7 +194,7 @@ var BuildingBlocks = (function() {
 	};
     })();
 
-$(document).ready(function() {
+$(window).load(function() {
 	$.each(["left_block", "right_block"], function(i,s) {
 		BuildingBlocks.build_block_source($("div#" + s));
 	    });
