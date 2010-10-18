@@ -22,6 +22,7 @@ var BuildingBlocks = (function() {
 	
 	function build_block_dest(jDest) {
 	    function col_from_event(event) {
+		var offset = jDest.offset();
 		var dx = event.pageX - offset.left;
 		return Math.floor(dx / BLOCK_WIDTH);		
 	    }
@@ -48,6 +49,7 @@ var BuildingBlocks = (function() {
 	    }
 
 	    function click_to_rc(event) {
+		var offset = jDest.offset();
 		var cCol = col_from_event(event);
 		var cRow = Math.floor(((offset.top + cHeight) - event.pageY)
 				      / BLOCK_WIDTH);
@@ -158,7 +160,6 @@ var BuildingBlocks = (function() {
 	    var cHeight = jDest.height();
 	    var cColumns = cWidth / BLOCK_WIDTH;
 	    var cMaxHeight = cHeight / BLOCK_WIDTH;
-	    var offset = jDest.offset();
 	    
 	    var rgRgBlocks = [];
 	    reset_blocks();
