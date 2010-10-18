@@ -159,8 +159,8 @@ var BuildingBlocks = (function() {
 
 	    var cWidth = jDest.width();
 	    var cHeight = jDest.height();
-	    var cColumns = cWidth / BLOCK_WIDTH;
-	    var cMaxHeight = cHeight / BLOCK_WIDTH;
+	    var cColumns = Math.floor(cWidth / BLOCK_WIDTH);
+	    var cMaxHeight = Math.floor(cHeight / BLOCK_WIDTH);
 	    
 	    var rgRgBlocks = [];
 	    reset_blocks();
