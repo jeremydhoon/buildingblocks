@@ -117,6 +117,21 @@ var BuildingBlocks = (function() {
 		}
 	    }
 
+	    function reset_blocks() {
+		rgRgBlocks = [];
+		var i;
+		for (i = 0; i < cColumns; i++) {
+		    rgRgBlocks.push([]);
+		}
+	    }
+
+	    function clear() {
+		jDest.children().fadeOut(200, function() {
+			jDest.empty();
+		    });
+		reset_blocks();
+	    }
+
 	    var cWidth = jDest.width();
 	    var cHeight = jDest.height();
 	    var cColumns = cWidth / BLOCK_WIDTH;
@@ -124,22 +139,21 @@ var BuildingBlocks = (function() {
 	    var offset = jDest.offset();
 	    
 	    var rgRgBlocks = [];
-	    var i;
-	    for (i = 0; i < cColumns; i++) {
-		rgRgBlocks.push([]);
-	    }
+	    reset_blocks();
 
 	    var options = {
 		drop: drop_handler,
 		activeClass: "droppable_highlight",		
 		scope: DRAGGABLE_SCOPE
 	    };
+	    disable_select(jDest);
 	    jDest.droppable(options);
 	    jDest.click(click_handler);
 
 	    var obj = {
 		blocks: rgRgBlocks,
-		widget: jDest
+		widget: jDest,
+		clear: clear
 	    };
 	    return obj;
 	}
@@ -151,8 +165,12 @@ var BuildingBlocks = (function() {
 	}
 
 	function clear_dest(dest) {
-	    dest.blocks = $.map(dest.blocks, function(ele,i) {return [];});
-	    widget.empty();
+	    dest.widget.children().fadeOut(200, function() {
+		    dest.widget.empty();
+		});
+	    dest.blocks = $.each(dest.blocks, function(i,rg) {
+		    rg.splice(0,rg.length);
+		});
 	}
 
 	return {build_block_source: build_block_source,
@@ -166,5 +184,8 @@ $(function() {
 		BuildingBlocks.build_block_source($("div#" + s));
 	    });
 	var dest = BuildingBlocks.build_block_dest($("div#construction_zone"));
-	$("a#clear_button").click(BuildingBlocks.clear_dest);
+	$("a#clear_button").click(function(event) {
+		dest.clear();
+		event.preventDefault();
+	    });
     });
