@@ -158,7 +158,16 @@ var BuildingBlocks = (function() {
 	    }
 
 	    function remove_bottom() {
-		alert("Implement me!");
+		var toRemove = []
+		$.each(rgRgBlocks, function(i,rgBlocks) {
+			if (rgBlocks.length > 0) {
+			    toRemove.push(rgBlocks[0]);
+			}
+		    });
+		$.each(toRemove,function(i,block) {
+			remove_block(block);
+		    });
+		$.each(rgRgBlocks, lower_col);
 	    }
 
 	    var cWidth = jDest.width();
